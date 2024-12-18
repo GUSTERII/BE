@@ -1,4 +1,4 @@
-package com.usv.examtimetabling.classroom.model;
+package com.usv.examtimetabling.sali.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

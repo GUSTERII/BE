@@ -1,9 +1,9 @@
-package com.usv.examtimetabling.classroom.service;
+package com.usv.examtimetabling.sali.service;
 
-import com.usv.examtimetabling.classroom.model.Sala;
+import com.usv.examtimetabling.sali.model.Sala;
 import java.util.List;
 
-public interface ClassroomService {
+public interface SaliService {
 
   List<Sala> getAllClassrooms();
 

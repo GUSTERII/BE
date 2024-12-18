@@ -1,7 +1,5 @@
 package com.usv.examtimetabling.exam.service.impl;
 
-import com.usv.examtimetabling.classroom.model.Sala;
-import com.usv.examtimetabling.classroom.repository.ClassroomRepository;
 import com.usv.examtimetabling.exam.model.Exam;
 import com.usv.examtimetabling.exam.model.ExamsPeriod;
 import com.usv.examtimetabling.exam.model.dto.ConfirmExamDto;
@@ -19,6 +17,8 @@ import com.usv.examtimetabling.exam.util.ExamStatus;
 import com.usv.examtimetabling.exam.util.TeacherSchedule;
 import com.usv.examtimetabling.faculty.degree.subgrupa.model.SubGrupa;
 import com.usv.examtimetabling.faculty.degree.subgrupa.repository.SubGrupaRepository;
+import com.usv.examtimetabling.sali.model.Sala;
+import com.usv.examtimetabling.sali.repository.SaliRepository;
 import com.usv.examtimetabling.subject.model.Subject;
 import com.usv.examtimetabling.subject.repository.SubjectRepository;
 import com.usv.examtimetabling.user.model.User;
@@ -47,7 +47,7 @@ public class ExamServiceImpl implements ExamService {
   private static final Logger log = LoggerFactory.getLogger(ExamServiceImpl.class);
   private final ExamRepository examRepository;
 
-  private final ClassroomRepository classroomRepository;
+  private final SaliRepository saliRepository;
 
   private final SubGrupaRepository groupRepository;
 
@@ -71,7 +71,7 @@ public class ExamServiceImpl implements ExamService {
       throw new RuntimeException("Exam is outside the  next exams period");
     }
 
-    Sala classroom = classroomRepository.findByName(createExamDto.getSala());
+    Sala classroom = saliRepository.findByName(createExamDto.getSala());
     if (classroom == null) {
       throw new RuntimeException("Sala not found");
     }
@@ -208,7 +208,7 @@ public class ExamServiceImpl implements ExamService {
     }
 
     // Find the classroom by name
-    Sala classroom = classroomRepository.findByName(updateExamDto.getSala());
+    Sala classroom = saliRepository.findByName(updateExamDto.getSala());
     if (classroom == null) {
       throw new RuntimeException("Sala not found");
     }
@@ -445,7 +445,7 @@ public class ExamServiceImpl implements ExamService {
     }
 
     // Find the classroom by name
-    Sala classroom = classroomRepository.findByName(createExamDto.getSala());
+    Sala classroom = saliRepository.findByName(createExamDto.getSala());
     if (classroom == null) {
       throw new RuntimeException("Sala not found");
     }

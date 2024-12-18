@@ -1,6 +1,6 @@
 package com.usv.examtimetabling.exam.repository;
 
-import com.usv.examtimetabling.classroom.model.Sala;
+import com.usv.examtimetabling.sali.model.Sala;
 import com.usv.examtimetabling.exam.model.Exam;
 import com.usv.examtimetabling.faculty.degree.subgrupa.model.SubGrupa;
 import com.usv.examtimetabling.subject.model.Subject;
