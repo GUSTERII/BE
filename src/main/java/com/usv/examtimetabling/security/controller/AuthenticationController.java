@@ -19,44 +19,40 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "https://gusteriife-azgvfvgdg3fmfth7.canadacentral-01.azurewebsites.net", allowCredentials = "true")
 public class AuthenticationController {
 
-    private final AuthenticationService authenticationService;
+  private final AuthenticationService authenticationService;
 
-    @CrossOrigin(origins = "http://127.0.0.1:5173")
-    @PostMapping("/create-user")
-    public ResponseEntity<?> createUser(@RequestBody CreateUserDto createUserDto) {
-        return ResponseEntity.ok(authenticationService.createUser(createUserDto));
-    }
+  @PostMapping("/create-user")
+  public ResponseEntity<?> createUser(@RequestBody CreateUserDto createUserDto) {
+    return ResponseEntity.ok(authenticationService.createUser(createUserDto));
+  }
 
-    @CrossOrigin(origins = "http://127.0.0.1:5173")
-    @PostMapping("/sign-up")
-    public UsersDto signUp(@RequestBody SignUpRequest signUpRequest) {
-        return authenticationService.signUp(signUpRequest);
-    }
+  @PostMapping("/sign-up")
+  public UsersDto signUp(@RequestBody SignUpRequest signUpRequest) {
+    return authenticationService.signUp(signUpRequest);
+  }
 
-    @CrossOrigin(origins = "http://127.0.0.1:5173")
-    @PostMapping("/forgot-password")
-    public void forgotPassword(@RequestParam String email) {
-        authenticationService.forgotPassword(email);
-    }
+  @PostMapping("/forgot-password")
+  public void forgotPassword(@RequestParam String email) {
+    authenticationService.forgotPassword(email);
+  }
 
-    @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
-    @PostMapping("/sign-in")
-    public ResponseEntity<JwtAuthenticationResponse> signIn(@RequestBody SignInRequest signInRequest) {
-        return ResponseEntity.ok(authenticationService.signIn(signInRequest));
-    }
+  @PostMapping("/sign-in")
+  public ResponseEntity<JwtAuthenticationResponse> signIn(
+      @RequestBody SignInRequest signInRequest) {
+    return ResponseEntity.ok(authenticationService.signIn(signInRequest));
+  }
 
+  @PostMapping("/refresh")
+  public ResponseEntity<JwtAuthenticationResponse> refresh(
+      @RequestBody RefreshTokenRequest refreshTokenRequest) {
+    return ResponseEntity.ok(authenticationService.refreshToken(refreshTokenRequest));
+  }
 
-    @CrossOrigin(origins = "http://127.0.0.1:5173")
-    @PostMapping("/refresh")
-    public ResponseEntity<JwtAuthenticationResponse> refresh(@RequestBody RefreshTokenRequest refreshTokenRequest) {
-        return ResponseEntity.ok(authenticationService.refreshToken(refreshTokenRequest));
-    }
-
-    @CrossOrigin(origins = "http://127.0.0.1:5173")
-    @PostMapping("/reset-password")
-    public void resetPassword(@RequestParam String token, @RequestParam String password) {
-        authenticationService.resetPassword(token, password);
-    }
+  @PostMapping("/reset-password")
+  public void resetPassword(@RequestParam String token, @RequestParam String password) {
+    authenticationService.resetPassword(token, password);
+  }
 }
