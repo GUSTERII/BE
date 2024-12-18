@@ -1,4 +1,4 @@
-package com.usv.examtimetabling;
+package com.usv.examtimetabling.orar;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

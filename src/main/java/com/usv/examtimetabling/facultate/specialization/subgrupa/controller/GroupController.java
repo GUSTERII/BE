@@ -1,5 +1,6 @@
 package com.usv.examtimetabling.facultate.specialization.subgrupa.controller;
 
+import com.usv.examtimetabling.facultate.specialization.subgrupa.model.SubGrupa;
 import com.usv.examtimetabling.facultate.specialization.subgrupa.model.dto.SubGrupaDto;
 import com.usv.examtimetabling.facultate.specialization.subgrupa.service.SubGrupaService;
 import java.util.List;
@@ -15,7 +16,7 @@ public class GroupController {
 
     @CrossOrigin(origins = "http://127.0.0.1:5173")
     @GetMapping("/all")
-    public List<SubGrupaDto> getAllGroups() {
+    public List<SubGrupa> getAllGroups() {
         return subGrupaService.getAllSubGrupas();
     }
 

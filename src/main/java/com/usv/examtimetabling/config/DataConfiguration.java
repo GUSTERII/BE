@@ -11,4 +11,6 @@ public class DataConfiguration {
   @Value("${default.email.sender:}")
   private String defaultEmailSender;
 
+  @Value("${seeding}")
+  private Boolean seeding;
 }

@@ -163,15 +163,7 @@ public class SubGrupaServiceImpl implements SubGrupaService {
   }
 
   @Override
-  public List<SubGrupaDto> getAllSubGrupas() {
-    return subGrupaRepository.findAll().stream()
-        .map(
-            subGrupa ->
-                SubGrupaDto.builder()
-                    .name(subGrupa.getSpecializationShortName())
-                    .specialization(subGrupa.getSpecializationShortName())
-                    .year(Integer.valueOf(subGrupa.getStudyYear()))
-                    .build())
-        .collect(Collectors.toList());
+  public List<SubGrupa> getAllSubGrupas() {
+    return subGrupaRepository.findAll();
   }
 }
