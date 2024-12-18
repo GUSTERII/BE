@@ -9,23 +9,26 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/sali")
 @RequiredArgsConstructor
+@CrossOrigin(
+    origins = {
+      "https://gusteriife-azgvfvgdg3fmfth7.canadacentral-01.azurewebsites.net",
+      "http://localhost:3000"
+    },
+    allowCredentials = "true")
 public class SaliController {
 
   private final SaliService saliService;
 
-  @CrossOrigin(origins = "http://127.0.0.1:5173")
   @GetMapping("/all")
   public List<Sala> getAllSali() {
     return saliService.getAllClassrooms();
   }
 
-  @CrossOrigin(origins = "http://127.0.0.1:5173")
   @PutMapping("/update")
   public Sala updateSala(@RequestBody Sala updateClassroomDto) {
     return saliService.updateClassroom(updateClassroomDto);
   }
 
-  @CrossOrigin(origins = "http://127.0.0.1:5173")
   @DeleteMapping("/delete")
   public void deleteSala(@RequestParam String name) {
     saliService.deleteClassroom(name);

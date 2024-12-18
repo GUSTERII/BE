@@ -19,7 +19,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "https://gusteriife-azgvfvgdg3fmfth7.canadacentral-01.azurewebsites.net", allowCredentials = "true")
+@CrossOrigin(
+    origins = {
+      "https://gusteriife-azgvfvgdg3fmfth7.canadacentral-01.azurewebsites.net",
+      "http://localhost:3000"
+    },
+    allowCredentials = "true")
 public class AuthenticationController {
 
   private final AuthenticationService authenticationService;

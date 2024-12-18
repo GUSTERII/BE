@@ -6,37 +6,38 @@ import com.usv.examtimetabling.facultate.model.dto.CreateFacultateDto;
 import com.usv.examtimetabling.facultate.model.dto.FacultateDto;
 import com.usv.examtimetabling.facultate.model.dto.UpdateFacultateDto;
 import com.usv.examtimetabling.facultate.service.FacultateService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/facultate")
 @RequiredArgsConstructor
+@CrossOrigin(
+    origins = {
+        "https://gusteriife-azgvfvgdg3fmfth7.canadacentral-01.azurewebsites.net",
+        "http://localhost:3000"
+    },
+    allowCredentials = "true")
 public class FacultateController {
 
     private final FacultateService facultateService;
 
-    @CrossOrigin(origins = "http://127.0.0.1:5173")
     @PostMapping("/add")
     public Facultate addFacultate(@RequestBody CreateFacultateDto createFacultateDto) {
         return facultateService.addFacultate(createFacultateDto);
     }
 
-    @CrossOrigin(origins = "http://127.0.0.1:5173")
     @GetMapping("/all")
     public List<FacultateDto> getAllFaculties() {
         return facultateService.getAllFaculties();
     }
 
-    @CrossOrigin(origins = "http://127.0.0.1:5173")
     @PutMapping("/update")
     public FacultateDto updateFacultate(@RequestBody UpdateFacultateDto updateFacultateDto) {
         return facultateService.updateFacultate(updateFacultateDto);
     }
 
-    @CrossOrigin(origins = "http://127.0.0.1:5173")
     @DeleteMapping("/delete")
     public void deleteFacultate(@RequestParam String name) {
         facultateService.deleteByName(name);

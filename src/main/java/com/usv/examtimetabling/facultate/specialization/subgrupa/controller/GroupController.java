@@ -10,25 +10,30 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/grupa")
 @RequiredArgsConstructor
+@CrossOrigin(
+    origins = {
+      "https://gusteriife-azgvfvgdg3fmfth7.canadacentral-01.azurewebsites.net",
+      "http://localhost:3000"
+    },
+    allowCredentials = "true")
 public class GroupController {
 
-    private final SubGrupaService subGrupaService;
+  private final SubGrupaService subGrupaService;
 
-    @CrossOrigin(origins = "http://127.0.0.1:5173")
-    @GetMapping("/all")
-    public List<SubGrupa> getAllGroups() {
-        return subGrupaService.getAllSubGrupas();
-    }
+  @GetMapping("/all")
+  public List<SubGrupa> getAllGroups() {
+    return subGrupaService.getAllSubGrupas();
+  }
 
-    @CrossOrigin(origins = "http://127.0.0.1:5173")
-    @PostMapping("/create")
-    public SubGrupaDto createGroup(@RequestBody SubGrupaDto subGrupaDto) {
-        return subGrupaService.createSubGrupa(subGrupaDto);
-    }
+  @PostMapping("/create")
+  public SubGrupaDto createGroup(@RequestBody SubGrupaDto subGrupaDto) {
+    return subGrupaService.createSubGrupa(subGrupaDto);
+  }
 
-//    @CrossOrigin(origins = "http://127.0.0.1:5173")
-//    @GetMapping("/getByDegreeAndYear")
-//    public SubGrupaDto getGroupByDegreeAndYear(@RequestParam String degreeName, @RequestParam Integer year) {
-//        return subGrupaService.getSubGrupaByDegreeAndYear(degreeName, year);
-//    }
+  //
+  //    @GetMapping("/getByDegreeAndYear")
+  //    public SubGrupaDto getGroupByDegreeAndYear(@RequestParam String degreeName, @RequestParam
+  // Integer year) {
+  //        return subGrupaService.getSubGrupaByDegreeAndYear(degreeName, year);
+  //    }
 }

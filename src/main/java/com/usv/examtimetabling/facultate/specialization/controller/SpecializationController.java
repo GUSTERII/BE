@@ -19,37 +19,40 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/specialization")
 @RequiredArgsConstructor
+@CrossOrigin(
+    origins = {
+      "https://gusteriife-azgvfvgdg3fmfth7.canadacentral-01.azurewebsites.net",
+      "http://localhost:3000"
+    },
+    allowCredentials = "true")
 public class SpecializationController {
 
-    private final SpecializationService specializationService;
+  private final SpecializationService specializationService;
 
-    @CrossOrigin(origins = "http://127.0.0.1:5173")
-    @PostMapping("/add")
-    public SpecializationDto addSpecialization(@RequestBody CreateSpecializationDto createSpecializationDto) {
-        return specializationService.addSpecialization(createSpecializationDto);
-    }
+  @PostMapping("/add")
+  public SpecializationDto addSpecialization(
+      @RequestBody CreateSpecializationDto createSpecializationDto) {
+    return specializationService.addSpecialization(createSpecializationDto);
+  }
 
-    @CrossOrigin(origins = "http://127.0.0.1:5173")
-    @GetMapping("/all")
-    public List<SpecializationDto> getSpecializationByFaculty(@RequestParam String facultyName) {
-        return specializationService.getSpecializationByFacultateName(facultyName);
-    }
+  @GetMapping("/all")
+  public List<SpecializationDto> getSpecializationByFaculty(@RequestParam String facultyName) {
+    return specializationService.getSpecializationByFacultateName(facultyName);
+  }
 
-    @CrossOrigin(origins = "http://127.0.0.1:5173")
-    @GetMapping("/allSpecializations")
-    public List<SpecializationDto> getAll() {
-        return specializationService.getAll();
-    }
+  @GetMapping("/allSpecializations")
+  public List<SpecializationDto> getAll() {
+    return specializationService.getAll();
+  }
 
-    @CrossOrigin(origins = "http://127.0.0.1:5173")
-    @PutMapping("/update")
-    public SpecializationDto updateSpecialization(@RequestBody UpdateSpecializationDto updateSpecializationDto) {
-        return specializationService.updateSpecialization(updateSpecializationDto);
-    }
+  @PutMapping("/update")
+  public SpecializationDto updateSpecialization(
+      @RequestBody UpdateSpecializationDto updateSpecializationDto) {
+    return specializationService.updateSpecialization(updateSpecializationDto);
+  }
 
-    @CrossOrigin(origins = "http://127.0.0.1:5173")
-    @DeleteMapping("/delete")
-    public void deleteSpecialization(@RequestParam String name) {
-        specializationService.deleteBySpecializationName(name);
-    }
+  @DeleteMapping("/delete")
+  public void deleteSpecialization(@RequestParam String name) {
+    specializationService.deleteBySpecializationName(name);
+  }
 }

@@ -12,7 +12,6 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,73 +24,71 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/exam")
 @RequiredArgsConstructor
+@CrossOrigin(
+    origins = {
+      "https://gusteriife-azgvfvgdg3fmfth7.canadacentral-01.azurewebsites.net",
+      "http://localhost:3000"
+    },
+    allowCredentials = "true")
 public class ExamController {
 
-    private static final Logger log = LoggerFactory.getLogger(ExamController.class);
-    private final ExamService examService;
+  private static final Logger log = LoggerFactory.getLogger(ExamController.class);
+  private final ExamService examService;
 
-//    @PutMapping("/random")
-//    public void assignExamRandomGroup(@RequestBody ExamAdd examAdd) {
-//        examService.assignExamRandomGroup(examAdd);
-//    }
-    @CrossOrigin(origins = "http://127.0.0.1:5173")
-    @PostMapping("/create")
-    public ExamDto createExam(@RequestBody CreateExamDto examDto) {
-        return examService.createExam(examDto);
-    }
+  //    @PutMapping("/random")
+  //    public void assignExamRandomGroup(@RequestBody ExamAdd examAdd) {
+  //        examService.assignExamRandomGroup(examAdd);
+  //    }
 
-    @CrossOrigin(origins = "http://127.0.0.1:5173")
-    @GetMapping("/get")
-    public List<ExamDto> getExams() {
-        return examService.getExams();
-    }
+  @PostMapping("/create")
+  public ExamDto createExam(@RequestBody CreateExamDto examDto) {
+    return examService.createExam(examDto);
+  }
 
-//    @PutMapping("/set")
-//    public void setExam(@RequestBody ExamDto examDto, @RequestParam String name, @RequestParam String group) {
-//        examService.setExam(examDto,name,group);
-//    }
+  @GetMapping("/get")
+  public List<ExamDto> getExams() {
+    return examService.getExams();
+  }
 
-    @CrossOrigin(origins = "http://127.0.0.1:5173")
-    @PostMapping("/confirm")
-    public ExamDto confirmExam(@RequestBody ConfirmExamDto confirmExamDto) {
-        return examService.confirmExam(confirmExamDto);
-    }
+  //    @PutMapping("/set")
+  //    public void setExam(@RequestBody ExamDto examDto, @RequestParam String name, @RequestParam
+  // String group) {
+  //        examService.setExam(examDto,name,group);
+  //    }
 
-    @CrossOrigin(origins = "http://127.0.0.1:5173")
-    @PutMapping("/update")
-    public ExamDto updateExam(@RequestBody UpdateExamDto updateExamDto) {
-        return examService.updateExam(updateExamDto);
-    }
+  @PostMapping("/confirm")
+  public ExamDto confirmExam(@RequestBody ConfirmExamDto confirmExamDto) {
+    return examService.confirmExam(confirmExamDto);
+  }
 
-    @CrossOrigin(origins = "http://127.0.0.1:5173")
-    @GetMapping("/get/user")
-    public List<ExamDto> getExamsByUser() {
-        return examService.getExamsByUser();
-    }
+  @PutMapping("/update")
+  public ExamDto updateExam(@RequestBody UpdateExamDto updateExamDto) {
+    return examService.updateExam(updateExamDto);
+  }
 
-    @CrossOrigin(origins = "http://127.0.0.1:5173")
-    @GetMapping("/get/specialization/{specializationName}")
-    public List<ExamDto> getExamsByFacultyAndSpecialization(@PathVariable String specializationName) {
-        return examService.getExamsByFacultyAndSpecialization(specializationName);
-    }
+  @GetMapping("/get/user")
+  public List<ExamDto> getExamsByUser() {
+    return examService.getExamsByUser();
+  }
 
-    @CrossOrigin(origins = "http://127.0.0.1:5173")
-    @PostMapping("/create/period")
-    public ExamsPeriodDto createExamsPeriod(@RequestBody CreateExamPeriodDto createExamPeriodDto) {
-      log.info("createExamsPeriod {}", createExamPeriodDto);
-        return examService.createExamsPeriod(createExamPeriodDto);
-    }
+  @GetMapping("/get/specialization/{specializationName}")
+  public List<ExamDto> getExamsByFacultyAndSpecialization(@PathVariable String specializationName) {
+    return examService.getExamsByFacultyAndSpecialization(specializationName);
+  }
 
-    @CrossOrigin(origins = "http://127.0.0.1:5173")
-    @GetMapping("/get/period")
-    public ExamsPeriodDto getExamsPeriod() {
-        return examService.getExamsPeriod();
-    }
+  @PostMapping("/create/period")
+  public ExamsPeriodDto createExamsPeriod(@RequestBody CreateExamPeriodDto createExamPeriodDto) {
+    log.info("createExamsPeriod {}", createExamPeriodDto);
+    return examService.createExamsPeriod(createExamPeriodDto);
+  }
 
-    @CrossOrigin(origins = "http://127.0.0.1:5173")
-    @PutMapping("/update/period")
-    public ExamsPeriodDto updateExamsPeriod(@RequestBody UpdateExamsPeriodDto updateExamsPeriodDto) {
-        return examService.updateExamsPeriod(updateExamsPeriodDto);
-    }
+  @GetMapping("/get/period")
+  public ExamsPeriodDto getExamsPeriod() {
+    return examService.getExamsPeriod();
+  }
 
+  @PutMapping("/update/period")
+  public ExamsPeriodDto updateExamsPeriod(@RequestBody UpdateExamsPeriodDto updateExamsPeriodDto) {
+    return examService.updateExamsPeriod(updateExamsPeriodDto);
+  }
 }
