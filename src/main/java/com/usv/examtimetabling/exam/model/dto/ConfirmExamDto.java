@@ -18,7 +18,7 @@ public class ConfirmExamDto {
 
   private String subGrupa;
 
-  private String subject;
+  private String materie;
 
   private String name;
 

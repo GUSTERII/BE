@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Entity
 @Builder
-@Table(name = "degree")
+@Table(name = "specialization")
 public class Specialization {
 
   @Id
@@ -31,7 +31,7 @@ public class Specialization {
   @JsonBackReference
   private Facultate facultate;
 
-  @OneToMany(mappedBy = "degree")
+  @OneToMany(mappedBy = "specialization")
   @JsonManagedReference
   private List<Student> students;
 }

@@ -18,7 +18,7 @@ public class CreateExamDto {
 
     private String subGrupa;
 
-    private String subject;
+    private String materie;
 
     private String title;
 
@@ -34,7 +34,7 @@ public class CreateExamDto {
 
     @Override
     public String toString() {
-        return "CreateExamDto{" + "classroom=" + sala + ", group=" + subGrupa + ", subject=" + subject + ", title=" + title + ", description=" + description + ", duration=" + duration + ", startTime=" + startTime + ", date=" + date + '}';
+        return "CreateExamDto{" + "classroom=" + sala + ", group=" + subGrupa + ", materie=" + materie + ", title=" + title + ", description=" + description + ", duration=" + duration + ", startTime=" + startTime + ", date=" + date + '}';
     }
 
 }

@@ -19,7 +19,7 @@ public class UpdateMaterieDto {
 
   private Integer year;
 
-  private String degree;
+  private String specialization;
 
   private String teacher;
 

@@ -28,7 +28,7 @@ public interface ExamService {
 
     List<ExamDto> getExamsByUser();
 
-  List<ExamDto> getExamsByFacultyAndDegree(String degreeName);
+  List<ExamDto> getExamsByFacultyAndSpecialization(String specializationName);
 
     ExamsPeriodDto createExamsPeriod(CreateExamPeriodDto createExamPeriodDto);
 

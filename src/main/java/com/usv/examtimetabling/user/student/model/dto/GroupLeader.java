@@ -18,9 +18,9 @@ public class GroupLeader {
 
     private Role role;
 
-    private String faculty;
+    private String facultate;
 
-    private String degree;
+    private String specialization;
 
     private Integer year;
 

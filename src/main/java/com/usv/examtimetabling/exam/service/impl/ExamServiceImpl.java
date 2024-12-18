@@ -83,12 +83,12 @@ public class ExamServiceImpl implements ExamService {
 
     Materie materie =
         materieRepository
-            .findByName(createExamDto.getSubject())
-            .orElseThrow(() -> new RuntimeException("Subject not found"));
+            .findByName(createExamDto.getMaterie())
+            .orElseThrow(() -> new RuntimeException("Materie not found"));
 
-    Optional<Exam> existingExam = examRepository.findBySubGrupaAndSubject(group, materie);
+    Optional<Exam> existingExam = examRepository.findBySubGrupaAndMaterie(group, materie);
     if (existingExam.isPresent()) {
-      throw new RuntimeException("The group already has an exam scheduled for this subject");
+      throw new RuntimeException("The group already has an exam scheduled for this materie");
     }
 
     LocalDate examDate =
@@ -198,13 +198,13 @@ public class ExamServiceImpl implements ExamService {
 
     Materie materie =
         materieRepository
-            .findByName(updateExamDto.getOldSubjectName())
-            .orElseThrow(() -> new RuntimeException("Subject not found"));
+            .findByName(updateExamDto.getOldMaterieName())
+            .orElseThrow(() -> new RuntimeException("Materie not found"));
 
-    // Check if the group already has an exam with the same subject
-    Optional<Exam> existingExam = examRepository.findBySubGrupaAndSubject(group, materie);
+    // Check if the group already has an exam with the same materie
+    Optional<Exam> existingExam = examRepository.findBySubGrupaAndMaterie(group, materie);
     if (existingExam.isEmpty()) {
-      throw new RuntimeException("The group does not have an exam scheduled for this subject");
+      throw new RuntimeException("The group does not have an exam scheduled for this materie");
     }
 
     // Find the classroom by name
@@ -239,8 +239,8 @@ public class ExamServiceImpl implements ExamService {
             .get()
             .setMaterie(
                 materieRepository
-                    .findByName(updateExamDto.getSubject())
-                    .orElseThrow(() -> new RuntimeException("Subject not found")));
+                    .findByName(updateExamDto.getMaterie())
+                    .orElseThrow(() -> new RuntimeException("Materie not found")));
         existingExam.get().setName(updateExamDto.getTitle());
         existingExam.get().setDescription(updateExamDto.getDescription());
         existingExam.get().setDuration(updateExamDto.getDuration());
@@ -274,8 +274,8 @@ public class ExamServiceImpl implements ExamService {
   }
 
   @Override
-  public List<ExamDto> getExamsByFacultyAndDegree(String degreeName) {
-    return examRepository.findExamsByDegree(degreeName).stream()
+  public List<ExamDto> getExamsByFacultyAndSpecialization(String specializationName) {
+    return examRepository.findExamsBySpecialization(specializationName).stream()
         .map(this::mapToExamDto)
         .collect(Collectors.toList());
   }
@@ -403,8 +403,8 @@ public class ExamServiceImpl implements ExamService {
     List<Exam> exams = new ArrayList<>();
     for (Materie materie : materies) {
       exams.addAll(
-          examRepository.findBySubject(materie).isPresent()
-              ? examRepository.findBySubject(materie).get()
+          examRepository.findByMaterie(materie).isPresent()
+              ? examRepository.findByMaterie(materie).get()
               : List.of());
     }
     return exams;
@@ -516,10 +516,10 @@ public class ExamServiceImpl implements ExamService {
 
     Materie materie =
         materieRepository
-            .findByName(createExamDto.getSubject())
-            .orElseThrow(() -> new RuntimeException("Subject not found"));
+            .findByName(createExamDto.getMaterie())
+            .orElseThrow(() -> new RuntimeException("Materie not found"));
     if (materie == null) {
-      throw new RuntimeException("Subject not found");
+      throw new RuntimeException("Materie not found");
     }
     exam.setMaterie(materie);
   }
@@ -535,7 +535,7 @@ public class ExamServiceImpl implements ExamService {
         .date(date)
         .classroom(exam.getSala().getName())
         .group(exam.getSubGrupa().getGroupName())
-        .subject(exam.getMaterie().getName())
+        .materie(exam.getMaterie().getName())
         .name(exam.getName())
         .description(exam.getDescription())
         .duration(exam.getDuration())

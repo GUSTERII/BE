@@ -70,9 +70,9 @@ public class ExamController {
     }
 
     @CrossOrigin(origins = "http://127.0.0.1:5173")
-    @GetMapping("/get/degree/{degreeName}")
-    public List<ExamDto> getExamsByFacultyAndDegree(@PathVariable String degreeName) {
-        return examService.getExamsByFacultyAndDegree(degreeName);
+    @GetMapping("/get/specialization/{specializationName}")
+    public List<ExamDto> getExamsByFacultyAndSpecialization(@PathVariable String specializationName) {
+        return examService.getExamsByFacultyAndSpecialization(specializationName);
     }
 
     @CrossOrigin(origins = "http://127.0.0.1:5173")

@@ -47,7 +47,7 @@ public class Student {
   private Facultate facultate;
 
   @ManyToOne
-  @JoinColumn(name = "degree_id")
+  @JoinColumn(name = "specialization_id")
   @JsonBackReference
   private Specialization specialization;
 

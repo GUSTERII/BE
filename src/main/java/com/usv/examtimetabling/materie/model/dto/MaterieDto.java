@@ -17,7 +17,7 @@ public class MaterieDto {
 
     private Integer year;
 
-    private String degree;
+    private String specialization;
 
     private String teacher;
 

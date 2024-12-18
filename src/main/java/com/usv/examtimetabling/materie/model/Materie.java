@@ -1,7 +1,7 @@
 package com.usv.examtimetabling.materie.model;
 
-import com.usv.examtimetabling.facultate.specialization.model.Specialization;
 import com.usv.examtimetabling.facultate.model.Facultate;
+import com.usv.examtimetabling.facultate.specialization.model.Specialization;
 import com.usv.examtimetabling.user.model.User;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -36,7 +36,7 @@ public class Materie {
   private Integer year;
 
   @ManyToOne
-  @JoinColumn(name = "degree_id")
+  @JoinColumn(name = "specialization_id")
   private Specialization specialization;
 
   @ManyToOne

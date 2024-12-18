@@ -17,18 +17,18 @@ public interface ExamRepository extends JpaRepository<Exam, Integer> {
 
   Exam findByNameAndSubGrupa_GroupName(String name, String groupName);
 
-  @Query("SELECT e FROM Exam e WHERE e.date = :date AND e.subject.teacher.id = :teacherId")
+  @Query("SELECT e FROM Exam e WHERE e.date = :date AND e.materie.teacher.id = :teacherId")
   List<Exam> findByDateAndTeacher(
       @Param("date") LocalDate date, @Param("teacherId") Integer teacherId);
 
   List<Exam> findBySubGrupa(SubGrupa group);
 
-  Optional<List<Exam>> findBySubject(Materie materie);
+  Optional<List<Exam>> findByMaterie(Materie materie);
 
-  @Query("SELECT e FROM Exam e JOIN e.subject s JOIN s.degree d WHERE d.name = :degreeName")
-  List<Exam> findExamsByDegree(@Param("degreeName") String degreeName);
+  @Query("SELECT e FROM Exam e JOIN e.materie s JOIN s.specialization d WHERE d.name = :specializationName")
+  List<Exam> findExamsBySpecialization(@Param("specializationName") String specializationName);
 
   List<Exam> findBySala(Sala classroom);
 
-  Optional<Exam> findBySubGrupaAndSubject(SubGrupa group, Materie materie);
+  Optional<Exam> findBySubGrupaAndMaterie(SubGrupa group, Materie materie);
 }

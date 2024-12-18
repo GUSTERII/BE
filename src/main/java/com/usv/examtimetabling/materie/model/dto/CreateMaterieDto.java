@@ -19,7 +19,7 @@ public class CreateMaterieDto {
 
   private String faculty;
 
-  private String degree;
+  private String specialization;
 
   private String teacher;
 

@@ -27,7 +27,7 @@ public class ExamDto {
 
     private String group;
 
-    private String subject;
+    private String materie;
 
     private String name;
 
@@ -48,7 +48,7 @@ public class ExamDto {
         return CreateExamDto.builder()
             .sala(classroom)
             .subGrupa(group)
-            .subject(subject)
+            .materie(materie)
             .title(name)
             .description(description)
             .duration(duration)
