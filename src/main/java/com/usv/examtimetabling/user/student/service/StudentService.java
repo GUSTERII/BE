@@ -14,7 +14,7 @@ public interface StudentService {
 
     List<StudentDto> getStudentsByFacultate(String faculty);
 
-    List<StudentDto> getStudentsByDegree(String degree);
+    List<StudentDto> getStudentsBySpecialization(String specialization);
 
     List<StudentDto> getStudentsBySubGrupa(String group);
 

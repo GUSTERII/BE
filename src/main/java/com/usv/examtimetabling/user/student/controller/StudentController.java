@@ -34,9 +34,9 @@ public class StudentController {
   }
 
   @CrossOrigin(origins = "http://127.0.0.1:5173")
-  @GetMapping("/degree")
-  public List<StudentDto> getStudentsByDegree(@RequestParam String degree) {
-    return studentService.getStudentsByDegree(degree);
+  @GetMapping("/specialization")
+  public List<StudentDto> getStudentsBySpecialization(@RequestParam String specialization) {
+    return studentService.getStudentsBySpecialization(specialization);
   }
 
   @CrossOrigin(origins = "http://127.0.0.1:5173")

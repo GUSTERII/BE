@@ -18,7 +18,7 @@ public class SetStudent {
 
   private String facultate;
 
-  private String degree;
+  private String specialization;
 
   private String subGrupa;
 

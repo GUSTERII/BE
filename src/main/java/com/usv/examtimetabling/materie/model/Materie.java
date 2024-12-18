@@ -1,17 +1,15 @@
-package com.usv.examtimetabling.user.student.model;
+package com.usv.examtimetabling.materie.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.usv.examtimetabling.facultate.specialization.subgrupa.model.SubGrupa;
 import com.usv.examtimetabling.facultate.specialization.model.Specialization;
 import com.usv.examtimetabling.facultate.model.Facultate;
-import com.usv.examtimetabling.user.model.utils.Role;
-import jakarta.persistence.Column;
+import com.usv.examtimetabling.user.model.User;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,36 +21,31 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Entity
 @Builder
-@Table(name = "student")
-public class Student {
+@Table(name = "subject")
+public class Materie {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE)
-  private Integer id;
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "subject_id_seq")
+  @SequenceGenerator(name = "subject_id_seq", sequenceName = "subject_id_seq", allocationSize = 1)
+  private Long id;
 
   private String name;
 
-  @Column(name = "email", unique = true)
-  private String email;
-
-  private String password;
-
-  private Role role;
+  private Integer semester;
 
   private Integer year;
 
   @ManyToOne
-  @JoinColumn(name = "facultate_id")
-  @JsonBackReference
-  private Facultate facultate;
-
-  @ManyToOne
   @JoinColumn(name = "degree_id")
-  @JsonBackReference
   private Specialization specialization;
 
   @ManyToOne
-  @JoinColumn(name = "sub_grupa_id")
-  @JsonBackReference
-  private SubGrupa subGrupa;
+  @JoinColumn(name = "teacher_id")
+  private User teacher;
+
+  @ManyToOne
+  @JoinColumn(name = "facultate_id")
+  private Facultate facultate;
+
+  private Integer examDuration;
 }

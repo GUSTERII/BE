@@ -1,8 +1,8 @@
 package com.usv.examtimetabling.user.student.repository;
 
-import com.usv.examtimetabling.faculty.degree.subgrupa.model.SubGrupa;
-import com.usv.examtimetabling.faculty.degree.model.Degree;
-import com.usv.examtimetabling.faculty.model.Facultate;
+import com.usv.examtimetabling.facultate.specialization.subgrupa.model.SubGrupa;
+import com.usv.examtimetabling.facultate.specialization.model.Specialization;
+import com.usv.examtimetabling.facultate.model.Facultate;
 import com.usv.examtimetabling.user.model.utils.Role;
 import com.usv.examtimetabling.user.student.model.Student;
 import java.util.List;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Repository;
 public interface StudentRepository extends JpaRepository<Student, Integer> {
   Optional<Student> findAllByFacultateLongName(String facultateLongName);
 
-  Optional<Student> findAllByDegreeName(String degree);
+  Optional<Student> findAllBySpecializationName(String degree);
 
   Optional<Student> findAllBySubGrupaGroupName(String subGrupaGroupName);
 
@@ -24,11 +24,11 @@ public interface StudentRepository extends JpaRepository<Student, Integer> {
 
   void deleteByEmail(String email);
 
-  List<Student> findAllByDegreeIsNotNullAndYearIsNotNullAndSubGrupaIsNull();
+  List<Student> findAllBySpecializationIsNotNullAndYearIsNotNullAndSubGrupaIsNull();
 
   Integer countByFacultate(Facultate facultate);
 
-  Integer countByDegree(Degree savedDegree);
+  Integer countBySpecialization(Specialization savedSpecialization);
 
   Integer countBySubGrupa(SubGrupa subGrupa);
 

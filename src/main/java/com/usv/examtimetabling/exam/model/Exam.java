@@ -3,8 +3,8 @@ package com.usv.examtimetabling.exam.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.usv.examtimetabling.sali.model.Sala;
 import com.usv.examtimetabling.exam.util.ExamStatus;
-import com.usv.examtimetabling.faculty.degree.subgrupa.model.SubGrupa;
-import com.usv.examtimetabling.subject.model.Subject;
+import com.usv.examtimetabling.facultate.specialization.subgrupa.model.SubGrupa;
+import com.usv.examtimetabling.materie.model.Materie;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -66,7 +66,7 @@ public class Exam {
   @NotNull
   @ManyToOne
   @JoinColumn(name = "subject_id", nullable = false)
-  private Subject subject;
+  private Materie materie;
 
   private ExamStatus status;
 }

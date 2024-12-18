@@ -15,12 +15,12 @@ import com.usv.examtimetabling.exam.service.ExamService;
 import com.usv.examtimetabling.exam.util.DateUtils;
 import com.usv.examtimetabling.exam.util.ExamStatus;
 import com.usv.examtimetabling.exam.util.TeacherSchedule;
-import com.usv.examtimetabling.faculty.degree.subgrupa.model.SubGrupa;
-import com.usv.examtimetabling.faculty.degree.subgrupa.repository.SubGrupaRepository;
+import com.usv.examtimetabling.facultate.specialization.subgrupa.model.SubGrupa;
+import com.usv.examtimetabling.facultate.specialization.subgrupa.repository.SubGrupaRepository;
 import com.usv.examtimetabling.sali.model.Sala;
 import com.usv.examtimetabling.sali.repository.SaliRepository;
-import com.usv.examtimetabling.subject.model.Subject;
-import com.usv.examtimetabling.subject.repository.SubjectRepository;
+import com.usv.examtimetabling.materie.model.Materie;
+import com.usv.examtimetabling.materie.repository.MaterieRepository;
 import com.usv.examtimetabling.user.model.User;
 import com.usv.examtimetabling.user.service.UserService;
 import com.usv.examtimetabling.user.student.model.Student;
@@ -51,7 +51,7 @@ public class ExamServiceImpl implements ExamService {
 
   private final SubGrupaRepository groupRepository;
 
-  private final SubjectRepository subjectRepository;
+  private final MaterieRepository materieRepository;
 
   private final StudentRepository studentRepository;
 
@@ -81,12 +81,12 @@ public class ExamServiceImpl implements ExamService {
             .findByGroupName(createExamDto.getSubGrupa())
             .orElseThrow(() -> new RuntimeException("SubGrupa not found"));
 
-    Subject subject =
-        subjectRepository
+    Materie materie =
+        materieRepository
             .findByName(createExamDto.getSubject())
             .orElseThrow(() -> new RuntimeException("Subject not found"));
 
-    Optional<Exam> existingExam = examRepository.findBySubGrupaAndSubject(group, subject);
+    Optional<Exam> existingExam = examRepository.findBySubGrupaAndSubject(group, materie);
     if (existingExam.isPresent()) {
       throw new RuntimeException("The group already has an exam scheduled for this subject");
     }
@@ -107,7 +107,7 @@ public class ExamServiceImpl implements ExamService {
       throw new RuntimeException("Exams cannot be scheduled after 8 PM until 8 AM");
     }
 
-    TeacherSchedule teacherSchedule = getTeacherSchedule(examDate, subject.getTeacher().getId());
+    TeacherSchedule teacherSchedule = getTeacherSchedule(examDate, materie.getTeacher().getId());
     if (teacherSchedule.getTotalHours() + createExamDto.getDuration() > 8) {
       throw new RuntimeException("The teacher's total work hours would exceed 8 hours");
     }
@@ -138,7 +138,7 @@ public class ExamServiceImpl implements ExamService {
             .duration(createExamDto.getDuration())
             .sala(classroom)
             .subGrupa(group)
-            .subject(subject)
+            .materie(materie)
             .status(status)
             .build();
 
@@ -174,7 +174,7 @@ public class ExamServiceImpl implements ExamService {
 
     // Check if the exam is assigned to the current professor
     if (!currentUser.getRole().name().equals("ADMIN")
-        && !exam.getSubject().getTeacher().equals(currentUser)) {
+        && !exam.getMaterie().getTeacher().equals(currentUser)) {
       throw new RuntimeException("Professors can only confirm their own exams");
     }
 
@@ -196,13 +196,13 @@ public class ExamServiceImpl implements ExamService {
             .findByGroupName(updateExamDto.getOldSubGrupaName())
             .orElseThrow(() -> new RuntimeException("SubGrupa not found"));
 
-    Subject subject =
-        subjectRepository
+    Materie materie =
+        materieRepository
             .findByName(updateExamDto.getOldSubjectName())
             .orElseThrow(() -> new RuntimeException("Subject not found"));
 
     // Check if the group already has an exam with the same subject
-    Optional<Exam> existingExam = examRepository.findBySubGrupaAndSubject(group, subject);
+    Optional<Exam> existingExam = examRepository.findBySubGrupaAndSubject(group, materie);
     if (existingExam.isEmpty()) {
       throw new RuntimeException("The group does not have an exam scheduled for this subject");
     }
@@ -237,8 +237,8 @@ public class ExamServiceImpl implements ExamService {
                     .orElseThrow(() -> new RuntimeException("SubGrupa not found")));
         existingExam
             .get()
-            .setSubject(
-                subjectRepository
+            .setMaterie(
+                materieRepository
                     .findByName(updateExamDto.getSubject())
                     .orElseThrow(() -> new RuntimeException("Subject not found")));
         existingExam.get().setName(updateExamDto.getTitle());
@@ -395,16 +395,16 @@ public class ExamServiceImpl implements ExamService {
   }
 
   private List<Exam> getExamsByTeacher(User user) {
-    List<Subject> subjects =
-        subjectRepository
+    List<Materie> materies =
+        materieRepository
             .findByTeacher(user)
             .orElseThrow(() -> new RuntimeException("Teacher not found"));
 
     List<Exam> exams = new ArrayList<>();
-    for (Subject subject : subjects) {
+    for (Materie materie : materies) {
       exams.addAll(
-          examRepository.findBySubject(subject).isPresent()
-              ? examRepository.findBySubject(subject).get()
+          examRepository.findBySubject(materie).isPresent()
+              ? examRepository.findBySubject(materie).get()
               : List.of());
     }
     return exams;
@@ -514,14 +514,14 @@ public class ExamServiceImpl implements ExamService {
     exam.setDuration(createExamDto.getDuration());
     exam.setStatus(ExamStatus.PENDING_CONFIRMATION);
 
-    Subject subject =
-        subjectRepository
+    Materie materie =
+        materieRepository
             .findByName(createExamDto.getSubject())
             .orElseThrow(() -> new RuntimeException("Subject not found"));
-    if (subject == null) {
+    if (materie == null) {
       throw new RuntimeException("Subject not found");
     }
-    exam.setSubject(subject);
+    exam.setMaterie(materie);
   }
 
   private ExamDto mapToExamDto(Exam exam) {
@@ -535,7 +535,7 @@ public class ExamServiceImpl implements ExamService {
         .date(date)
         .classroom(exam.getSala().getName())
         .group(exam.getSubGrupa().getGroupName())
-        .subject(exam.getSubject().getName())
+        .subject(exam.getMaterie().getName())
         .name(exam.getName())
         .description(exam.getDescription())
         .duration(exam.getDuration())

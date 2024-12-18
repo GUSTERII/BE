@@ -1,9 +1,9 @@
 package com.usv.examtimetabling.user.student.service.impl;
 
-import com.usv.examtimetabling.faculty.degree.subgrupa.model.SubGrupa;
-import com.usv.examtimetabling.faculty.degree.subgrupa.repository.SubGrupaRepository;
-import com.usv.examtimetabling.faculty.degree.repository.DegreeRepository;
-import com.usv.examtimetabling.faculty.repository.FacultateRepository;
+import com.usv.examtimetabling.facultate.specialization.subgrupa.model.SubGrupa;
+import com.usv.examtimetabling.facultate.specialization.subgrupa.repository.SubGrupaRepository;
+import com.usv.examtimetabling.facultate.specialization.repository.SpecializationRepository;
+import com.usv.examtimetabling.facultate.repository.FacultateRepository;
 import com.usv.examtimetabling.user.model.utils.Role;
 import com.usv.examtimetabling.user.repository.UserRepository;
 import com.usv.examtimetabling.user.student.model.Student;
@@ -26,7 +26,7 @@ public class StudentServiceImpl implements StudentService {
 
   private final UserRepository userRepository;
 
-  private final DegreeRepository degreeRepository;
+  private final SpecializationRepository specializationRepository;
 
   private final SubGrupaRepository groupRepository;
 
@@ -43,7 +43,7 @@ public class StudentServiceImpl implements StudentService {
               student.setName(setStudent.getName());
               student.setFacultate(
                   facultateRepository.findByLongName(setStudent.getFacultate()).orElseThrow());
-              student.setDegree(degreeRepository.findByName(setStudent.getDegree()).orElseThrow());
+              student.setSpecialization(specializationRepository.findByName(setStudent.getSpecialization()).orElseThrow());
               student.setSubGrupa(
                   groupRepository.findByGroupName(setStudent.getSubGrupa()).orElse(null));
               student.setYear(setStudent.getYear());
@@ -64,7 +64,7 @@ public class StudentServiceImpl implements StudentService {
                   .email(updatedStudent.getEmail())
                   .role(updatedStudent.getRole())
                   .faculty(updatedStudent.getFacultate().getLongName())
-                  .degree(updatedStudent.getDegree().getName())
+                  .specialization(updatedStudent.getSpecialization().getName())
                   .group(updatedStudent.getSubGrupa().getGroupName())
                   .year(updatedStudent.getYear())
                   .build();
@@ -116,7 +116,7 @@ public class StudentServiceImpl implements StudentService {
                         student.getFacultate() != null
                             ? student.getFacultate().getLongName()
                             : null)
-                    .degree(student.getDegree() != null ? student.getDegree().getName() : null)
+                    .specialization(student.getSpecialization() != null ? student.getSpecialization().getName() : null)
                     .group(
                         student.getSubGrupa() != null ? student.getSubGrupa().getGroupName() : null)
                     .year(student.getYear())
@@ -133,14 +133,14 @@ public class StudentServiceImpl implements StudentService {
                     .email(student.getEmail())
                     .role(student.getRole())
                     .faculty(student.getFacultate().getLongName())
-                    .degree(student.getDegree().getName())
+                    .specialization(student.getSpecialization().getName())
                     .group(student.getSubGrupa().getGroupName())
                     .build())
         .collect(Collectors.toList());
   }
 
-  public List<StudentDto> getStudentsByDegree(String degree) {
-    return studentRepository.findAllByDegreeName(degree).stream()
+  public List<StudentDto> getStudentsBySpecialization(String specialization) {
+    return studentRepository.findAllBySpecializationName(specialization).stream()
         .map(
             student ->
                 StudentDto.builder()
@@ -148,7 +148,7 @@ public class StudentServiceImpl implements StudentService {
                     .email(student.getEmail())
                     .role(student.getRole())
                     .faculty(student.getFacultate().getLongName())
-                    .degree(student.getDegree().getName())
+                    .specialization(student.getSpecialization().getName())
                     .group(student.getSubGrupa().getGroupName())
                     .build())
         .collect(Collectors.toList());
@@ -163,7 +163,7 @@ public class StudentServiceImpl implements StudentService {
                     .email(student.getEmail())
                     .role(student.getRole())
                     .faculty(student.getFacultate().getLongName())
-                    .degree(student.getDegree().getName())
+                    .specialization(student.getSpecialization().getName())
                     .group(student.getSubGrupa().getGroupName())
                     .build())
         .collect(Collectors.toList());

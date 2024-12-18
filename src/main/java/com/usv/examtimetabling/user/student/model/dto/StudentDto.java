@@ -22,7 +22,7 @@ public class StudentDto {
 
     private String faculty;
 
-    private String degree;
+    private String specialization;
 
     private Integer year;
 

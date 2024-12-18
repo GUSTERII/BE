@@ -2,8 +2,8 @@ package com.usv.examtimetabling.exam.repository;
 
 import com.usv.examtimetabling.sali.model.Sala;
 import com.usv.examtimetabling.exam.model.Exam;
-import com.usv.examtimetabling.faculty.degree.subgrupa.model.SubGrupa;
-import com.usv.examtimetabling.subject.model.Subject;
+import com.usv.examtimetabling.facultate.specialization.subgrupa.model.SubGrupa;
+import com.usv.examtimetabling.materie.model.Materie;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -23,12 +23,12 @@ public interface ExamRepository extends JpaRepository<Exam, Integer> {
 
   List<Exam> findBySubGrupa(SubGrupa group);
 
-  Optional<List<Exam>> findBySubject(Subject subject);
+  Optional<List<Exam>> findBySubject(Materie materie);
 
   @Query("SELECT e FROM Exam e JOIN e.subject s JOIN s.degree d WHERE d.name = :degreeName")
   List<Exam> findExamsByDegree(@Param("degreeName") String degreeName);
 
   List<Exam> findBySala(Sala classroom);
 
-  Optional<Exam> findBySubGrupaAndSubject(SubGrupa group, Subject subject);
+  Optional<Exam> findBySubGrupaAndSubject(SubGrupa group, Materie materie);
 }
