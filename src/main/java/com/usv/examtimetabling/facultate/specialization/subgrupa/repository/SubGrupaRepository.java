@@ -13,7 +13,7 @@ public interface SubGrupaRepository extends JpaRepository<SubGrupa, Long> {
 
   Optional<SubGrupa> findByGroupNameAndStudyYearAndSpecializationShortName(String name, String studyYear, String specializationShortName);
 
-  Optional<SubGrupa> findByGroupName(String name);
+  Optional<List<SubGrupa>> findByGroupName(String name);
 
   @Query("SELECT g FROM SubGrupa g WHERE g.groupName = ?1")
   SubGrupa findByGroupNameNotOptional(String groupName);

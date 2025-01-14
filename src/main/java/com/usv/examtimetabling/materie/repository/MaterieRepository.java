@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface MaterieRepository extends JpaRepository<Materie, Long> {
   Optional<Materie> findByName(String subject);
+  List<Materie> findAllByName(String subject);
 
   Optional<List<Materie>> findByTeacher(User teacherEntity);
 

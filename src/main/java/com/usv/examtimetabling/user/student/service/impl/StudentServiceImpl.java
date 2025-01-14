@@ -13,6 +13,7 @@ import com.usv.examtimetabling.user.student.repository.StudentRepository;
 import com.usv.examtimetabling.user.student.service.StudentService;
 import jakarta.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -44,8 +45,9 @@ public class StudentServiceImpl implements StudentService {
               student.setFacultate(
                   facultateRepository.findByLongName(setStudent.getFacultate()).orElseThrow());
               student.setSpecialization(specializationRepository.findByName(setStudent.getSpecialization()).orElseThrow());
-              student.setSubGrupa(
-                  groupRepository.findByGroupName(setStudent.getSubGrupa()).orElse(null));
+              Optional<List<SubGrupa>> subGrupaList = groupRepository.findByGroupName(setStudent.getSubGrupa());
+
+              student.setSubGrupa(subGrupaList.get().get(0));
               student.setYear(setStudent.getYear());
               Student updatedStudent = studentRepository.save(student);
 

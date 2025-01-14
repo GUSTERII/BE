@@ -71,22 +71,21 @@ public class ExamServiceImpl implements ExamService {
       throw new RuntimeException("Exam is outside the  next exams period");
     }
 
-    Sala classroom = saliRepository.findByName(createExamDto.getSala());
+    List<Sala> classroom = saliRepository.findAllByName(createExamDto.getSala());
     if (classroom == null) {
       throw new RuntimeException("Sala not found");
     }
 
-    SubGrupa group =
+    List<SubGrupa> group =
         groupRepository
             .findByGroupName(createExamDto.getSubGrupa())
             .orElseThrow(() -> new RuntimeException("SubGrupa not found"));
 
-    Materie materie =
+    List<Materie> materie =
         materieRepository
-            .findByName(createExamDto.getMaterie())
-            .orElseThrow(() -> new RuntimeException("Materie not found"));
+            .findAllByName(createExamDto.getMaterie());
 
-    Optional<Exam> existingExam = examRepository.findBySubGrupaAndMaterie(group, materie);
+    Optional<Exam> existingExam = examRepository.findBySubGrupaAndMaterie(group.get(0), materie.get(0));
     if (existingExam.isPresent()) {
       throw new RuntimeException("The group already has an exam scheduled for this materie");
     }
@@ -94,9 +93,12 @@ public class ExamServiceImpl implements ExamService {
     LocalDate examDate =
         createExamDto.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
     LocalTime startTime = createExamDto.getStartTime();
-
-    if (!isSalaAvailable(classroom, startTime, createExamDto.getDuration(), null)
-        || studentRepository.countBySubGrupa(group) > classroom.getCapacity()) {
+    Integer studentsInGroup = 0;
+    for (SubGrupa subGrupa : group) {
+      studentsInGroup += studentRepository.countBySubGrupa(subGrupa);
+    }
+    if (!isSalaAvailable(classroom.get(0), startTime, createExamDto.getDuration(), null)
+        || studentsInGroup > classroom.get(0).getCapacity()) {
       throw new RuntimeException(
           "Sala is not available at the specified time or does not have enough capacity");
     }
@@ -107,7 +109,7 @@ public class ExamServiceImpl implements ExamService {
       throw new RuntimeException("Exams cannot be scheduled after 8 PM until 8 AM");
     }
 
-    TeacherSchedule teacherSchedule = getTeacherSchedule(examDate, materie.getTeacher().getId());
+    TeacherSchedule teacherSchedule = getTeacherSchedule(examDate, materie.get(0).getTeacher().getId());
     if (teacherSchedule.getTotalHours() + createExamDto.getDuration() > 8) {
       throw new RuntimeException("The teacher's total work hours would exceed 8 hours");
     }
@@ -129,24 +131,26 @@ public class ExamServiceImpl implements ExamService {
             : ExamStatus.PENDING_CONFIRMATION;
 
     // Create the new exam
-    Exam exam =
-        Exam.builder()
-            .name(createExamDto.getTitle())
-            .description(createExamDto.getDescription())
-            .date(examDate)
-            .start(startTime)
-            .duration(createExamDto.getDuration())
-            .sala(classroom)
-            .subGrupa(group)
-            .materie(materie)
-            .status(status)
-            .build();
+    for (SubGrupa subGrupa : group) {
+      Exam newExam =
+          Exam.builder()
+              .name(createExamDto.getTitle())
+              .description(createExamDto.getDescription())
+              .date(examDate)
+              .start(startTime)
+              .duration(createExamDto.getDuration())
+              .sala(classroom.get(0))
+              .subGrupa(subGrupa)
+              .materie(materie.get(0))
+              .status(status)
+              .build();
 
-    // Save the new exam
-    examRepository.save(exam);
+      // Save the new exam
+      examRepository.save(newExam);
+    }
 
     // Map the new exam to ExamDto and return it
-    return mapToExamDto(exam);
+    return null;
   }
 
   @Override
@@ -191,7 +195,7 @@ public class ExamServiceImpl implements ExamService {
   @Override
   @Transactional
   public ExamDto updateExam(UpdateExamDto updateExamDto) {
-    SubGrupa group =
+    List<SubGrupa> group =
         groupRepository
             .findByGroupName(updateExamDto.getOldSubGrupaName())
             .orElseThrow(() -> new RuntimeException("SubGrupa not found"));
@@ -202,7 +206,7 @@ public class ExamServiceImpl implements ExamService {
             .orElseThrow(() -> new RuntimeException("Materie not found"));
 
     // Check if the group already has an exam with the same materie
-    Optional<Exam> existingExam = examRepository.findBySubGrupaAndMaterie(group, materie);
+    Optional<Exam> existingExam = examRepository.findBySubGrupaAndMaterie(group.get(0), materie);
     if (existingExam.isEmpty()) {
       throw new RuntimeException("The group does not have an exam scheduled for this materie");
     }
@@ -229,12 +233,13 @@ public class ExamServiceImpl implements ExamService {
         existingExam.get().setDate(examDate);
         existingExam.get().setStart(startTime);
         existingExam.get().setSala(classroom);
+        List<SubGrupa> subGrupa =
+            groupRepository
+                .findByGroupName(updateExamDto.getSubGrupa())
+                .orElseThrow(() -> new RuntimeException("SubGrupa not found"));
         existingExam
             .get()
-            .setSubGrupa(
-                groupRepository
-                    .findByGroupName(updateExamDto.getSubGrupa())
-                    .orElseThrow(() -> new RuntimeException("SubGrupa not found")));
+            .setSubGrupa(subGrupa.get(0)); // TODO: check if the group is the same
         existingExam
             .get()
             .setMaterie(
@@ -470,9 +475,9 @@ public class ExamServiceImpl implements ExamService {
   }
 
   private Exam findExamByNameAndSubGrupa(String name, String groupName) {
-    Optional<SubGrupa> groupOptional = groupRepository.findByGroupName(groupName);
+    Optional<List<SubGrupa>> groupOptional = groupRepository.findByGroupName(groupName);
     return groupOptional
-        .map(group -> examRepository.findByNameAndSubGrupa_GroupName(name, group.getGroupName()))
+        .map(group -> examRepository.findByNameAndSubGrupa_GroupName(name, group.get(0).getGroupName()))
         .orElse(null);
   }
 
