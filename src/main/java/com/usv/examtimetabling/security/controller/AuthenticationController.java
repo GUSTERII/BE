@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin(
     origins = {
       "https://gusteriife-azgvfvgdg3fmfth7.canadacentral-01.azurewebsites.net",
+      "https://gusteriife-azgvfvgdg3fmfth7.canadacentral-01.azurewebsites.net/",
       "http://localhost:3000"
     },
     allowCredentials = "true")
