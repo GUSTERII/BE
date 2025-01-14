@@ -239,7 +239,7 @@ public class ExamServiceImpl implements ExamService {
                 .orElseThrow(() -> new RuntimeException("SubGrupa not found"));
         existingExam
             .get()
-            .setSubGrupa(subGrupa.get(0)); // TODO: check if the group is the same
+            .setSubGrupa(subGrupa.get(0));
         existingExam
             .get()
             .setMaterie(

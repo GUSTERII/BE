@@ -52,7 +52,8 @@ public class Seeder {
       //      populateRooms();
       //      populateSpecializations();
       //      populateUsers();
-      populateMaterieEntries();
+//      populateMaterieEntries();
+//      createSpecializationsBasedOnGroupsData();
       //      populateSubGroups();
     }
     // Add methods for other entities as needed
@@ -112,12 +113,29 @@ public class Seeder {
     }
   }
 
+
+
   private Specialization findSpecialization(List<String> courseInfo) {
     if (courseInfo != null && !courseInfo.isEmpty()) {
       String specializationName = courseInfo.get(0).split(",")[1].trim();
       return specializationRepository.findByName(specializationName).orElse(null);
     }
     return null;
+  }
+
+  private void createSpecializationsBasedOnGroupsData()
+  {
+    List<SubGrupa> subGrupas = subGrupaRepository.findAll();
+    for (SubGrupa s:subGrupas)
+    {
+      if (specializationRepository.findByName(s.getSpecializationShortName()).isEmpty()) {
+        Specialization specialization = new Specialization();
+        specialization.setFacultate(
+            facultateRepository.findById(Long.valueOf(s.getFacultyId())).orElse(null));
+        specialization.setName(s.getSpecializationShortName());
+        specializationRepository.save(specialization);
+      }
+    }
   }
 
 
