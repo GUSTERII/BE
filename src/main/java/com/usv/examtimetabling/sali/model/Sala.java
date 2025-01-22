@@ -26,6 +26,6 @@ public class Sala {
     private String buildingName = "0"; // Default value
 
     public int getCapacity() {
-        return 1;
+        return 10;
     }
 }

@@ -10,4 +10,6 @@ public interface ProfesorRepository extends JpaRepository<Profesor, Integer> {
   Optional<Profesor> findByFirstNameAndLastName(String firstName, String lastName);
 
   Optional<Profesor> findByEmailAddress(String teacher);
+
+  boolean existsByEmailAddress(String emailAddress);
 }

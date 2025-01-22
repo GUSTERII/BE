@@ -23,4 +23,6 @@ public interface SubGrupaRepository extends JpaRepository<SubGrupa, Long> {
 //  Optional<SubGrupa> findBySpecializationShortNameAndStudyYear(String specializationShortName, String studyYear);
 
   List<SubGrupa> findBySpecializationShortNameAndStudyYear(String specializationShortName, String studyYear);
+
+  boolean existsByGroupNameAndSubgroupIndex(String groupName, String subgroupIndex);
 }

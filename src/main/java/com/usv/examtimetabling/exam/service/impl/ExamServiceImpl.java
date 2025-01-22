@@ -134,6 +134,8 @@ public class ExamServiceImpl implements ExamService {
             ? ExamStatus.CONFIRMED
             : ExamStatus.PENDING_CONFIRMATION;
 
+    isCurrentUserGroupLeaderOfTheSubGroup(currentUser, group.get(0));
+
     // Create the new exam
     for (SubGrupa subGrupa : group) {
       if (Objects.equals(subGrupa.getSubgroupIndex(), "a")) {
@@ -156,6 +158,16 @@ public class ExamServiceImpl implements ExamService {
 
     // Map the new exam to ExamDto and return it
     return null;
+  }
+
+  private void isCurrentUserGroupLeaderOfTheSubGroup(User currentUser, SubGrupa subGrupa) {
+    if (currentUser.getRole().name().equals("GROUP_LEADER")) {
+      Student student =
+          studentRepository.findByEmail(currentUser.getEmail()).orElseThrow(() -> new RuntimeException("Student not found"));
+      if (!student.getSubGrupa().equals(subGrupa)) {
+        throw new RuntimeException("You are not the group leader of the specified group");
+      }
+    }
   }
 
   @Override

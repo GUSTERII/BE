@@ -49,13 +49,13 @@ public class Seeder {
   @PostConstruct
   public void seedDatabase() {
     if (dataConfiguration.getSeeding()) {
-      populateFaculties();
-      populateRooms();
-      populateSpecializations();
-      createSpecializationsBasedOnGroupsData();
+//      fetchAndPopulateProfessors();
+//      populateFaculties();
+//      populateSpecializations();
+//      fetchAndPopulateSubjects();
       populateSubGroups();
-      fetchAndPopulateProfessors();
-      fetchAndPopulateSubjects();
+//      populateRooms();
+      createSpecializationsBasedOnGroupsData();
       populateUsers();
     }
   }
@@ -105,7 +105,13 @@ public class Seeder {
             .collect(Collectors.toList());
 
     // Save to database
-    profesorRepository.saveAll(profesores);
+    profesores.forEach(
+        profesor -> {
+          if (!profesorRepository.existsByEmailAddress(
+              profesor.getEmailAddress())) { // Avoid duplicates
+            profesorRepository.save(profesor);
+          }
+        });
   }
 
   public void fetchAndPopulateSubjects() {
@@ -348,7 +354,12 @@ public class Seeder {
   private void populateSubGroups() {
     String url = "https://orar.usv.ro/orar/vizualizare/data/subgrupe.php?json";
     List<SubGrupa> subGroups = apiService.fetchApiData(url, SubGrupa[].class);
-    subGrupaRepository.saveAll(subGroups);
+    subGroups.forEach(
+        subGrupa -> {
+          if (!subGrupaRepository.existsByGroupNameAndSubgroupIndex(subGrupa.getGroupName(), subGrupa.getSubgroupIndex())) {
+            subGrupaRepository.save(subGrupa);
+          }
+        });
   }
 
   private void populateUsers() {
@@ -358,7 +369,7 @@ public class Seeder {
             .map(
                 profesor -> {
                   User user = new User();
-                  user.setName(profesor.getFirstName() + " " + profesor.getLastName());
+                  user.setName( profesor.getLastName() + " " + profesor.getFirstName());
                   user.setEmail(profesor.getEmailAddress());
                   user.setPassword("$2a$10$oMnnDxXJpv83aZA5vF4ZfOaa75ENafiujgiE9.EpgVFqNUhQhUCbe");
                   user.setRole(Role.PROFESSOR);
