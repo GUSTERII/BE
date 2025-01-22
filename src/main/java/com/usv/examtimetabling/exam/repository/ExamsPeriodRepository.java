@@ -11,7 +11,7 @@ public interface ExamsPeriodRepository extends JpaRepository<ExamsPeriod, Intege
 
   ExamsPeriod findByStartDateAndEndDate(LocalDate startDate, LocalDate endDate);
 
-  @Query("SELECT ep FROM ExamsPeriod ep WHERE ep.startDate > :date ORDER BY ep.startDate ASC LIMIT 1")
+  @Query("SELECT ep FROM ExamsPeriod ep WHERE ep.startDate >= :date ORDER BY ep.startDate ASC LIMIT 1")
   ExamsPeriod findNextPeriod(LocalDate date);
 
   @Query("SELECT ep FROM ExamsPeriod ep WHERE ep.startDate <= :currentDate AND ep.endDate >= :currentDate")

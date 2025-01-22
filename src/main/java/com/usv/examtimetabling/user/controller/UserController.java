@@ -1,5 +1,6 @@
 package com.usv.examtimetabling.user.controller;
 
+import com.usv.examtimetabling.materie.model.dto.MaterieDto;
 import com.usv.examtimetabling.security.dto.ChangePasswordDto;
 import com.usv.examtimetabling.security.services.AuthenticationService;
 import com.usv.examtimetabling.user.service.UserService;

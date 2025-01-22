@@ -24,21 +24,6 @@ public class MaterieController {
   private static final Logger log = LoggerFactory.getLogger(MaterieController.class);
   private final MaterieService materieService;
 
-  @PostMapping
-  public MaterieDto addMaterie(@RequestBody CreateMaterieDto createMaterieDto) {
-    return materieService.addMaterie(createMaterieDto);
-  }
-
-  @PutMapping("/update")
-  public MaterieDto updateMaterie(@RequestBody UpdateMaterieDto updateMaterieDto) {
-    return materieService.updateMaterie(updateMaterieDto);
-  }
-
-  @PutMapping("/teacher")
-  public MaterieDto addTeacher(@RequestParam String name, @RequestParam String teacher) {
-    return materieService.addTeacher(name, teacher);
-  }
-
   @GetMapping
   public List<MaterieDto> getAll() {
     return materieService.getAll();

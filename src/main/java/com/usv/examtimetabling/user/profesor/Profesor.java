@@ -1,11 +1,11 @@
-package com.usv.examtimetabling.user;
+package com.usv.examtimetabling.user.profesor;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "person")
+@Table(name = "profesor")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

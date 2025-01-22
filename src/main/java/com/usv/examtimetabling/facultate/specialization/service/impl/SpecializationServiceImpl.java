@@ -70,10 +70,10 @@ public class SpecializationServiceImpl implements SpecializationService {
     public List<SpecializationDto> getAll() {
         List<Specialization> specializations = specializationRepository.findAll();
         return specializations.stream()
-                .map(degree -> SpecializationDto.builder()
-                        .name(degree.getName())
-                        .facultateName(degree.getFacultate().getLongName())
-                        .numberOfStudents(studentRepository.countBySpecialization(degree))
+                .map(specialization -> SpecializationDto.builder()
+                        .name(specialization.getName())
+                        .facultateName(specialization.getFacultate().getLongName())
+                        .numberOfStudents(studentRepository.countBySpecialization(specialization))
                         .build())
                 .toList();
     }

@@ -12,4 +12,6 @@ public interface SaliRepository extends JpaRepository<Sala, Integer> {
   void deleteByName(String name);
   Sala findByName(String name);
   List<Sala> findAllByName(String name);
+
+  boolean existsByName(String name);
 }

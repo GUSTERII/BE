@@ -17,9 +17,9 @@ public interface ExamRepository extends JpaRepository<Exam, Integer> {
 
   Exam findByNameAndSubGrupa_GroupName(String name, String groupName);
 
-  @Query("SELECT e FROM Exam e WHERE e.date = :date AND e.materie.teacher.id = :teacherId")
+  @Query("SELECT e FROM Exam e WHERE e.date = :date AND e.materie.profesor.id = :teacherId")
   List<Exam> findByDateAndTeacher(
-      @Param("date") LocalDate date, @Param("teacherId") Integer teacherId);
+      @Param("date") LocalDate date, @Param("teacherId") Long teacherId);
 
   List<Exam> findBySubGrupa(SubGrupa group);
 

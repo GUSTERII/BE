@@ -22,6 +22,8 @@ import com.usv.examtimetabling.sali.repository.SaliRepository;
 import com.usv.examtimetabling.materie.model.Materie;
 import com.usv.examtimetabling.materie.repository.MaterieRepository;
 import com.usv.examtimetabling.user.model.User;
+import com.usv.examtimetabling.user.profesor.Profesor;
+import com.usv.examtimetabling.user.profesor.ProfesorRepository;
 import com.usv.examtimetabling.user.service.UserService;
 import com.usv.examtimetabling.user.student.model.Student;
 import com.usv.examtimetabling.user.student.repository.StudentRepository;
@@ -33,6 +35,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -58,6 +61,7 @@ public class ExamServiceImpl implements ExamService {
   private final UserService userService;
 
   private final ExamsPeriodRepository examsPeriodRepository;
+  private final ProfesorRepository profesorRepository;
 
   // New method to create an exam
   @Transactional
@@ -109,7 +113,7 @@ public class ExamServiceImpl implements ExamService {
       throw new RuntimeException("Exams cannot be scheduled after 8 PM until 8 AM");
     }
 
-    TeacherSchedule teacherSchedule = getTeacherSchedule(examDate, materie.get(0).getTeacher().getId());
+    TeacherSchedule teacherSchedule = getTeacherSchedule(examDate, materie.get(0).getProfesor().getId());
     if (teacherSchedule.getTotalHours() + createExamDto.getDuration() > 8) {
       throw new RuntimeException("The teacher's total work hours would exceed 8 hours");
     }
@@ -132,21 +136,22 @@ public class ExamServiceImpl implements ExamService {
 
     // Create the new exam
     for (SubGrupa subGrupa : group) {
-      Exam newExam =
-          Exam.builder()
-              .name(createExamDto.getTitle())
-              .description(createExamDto.getDescription())
-              .date(examDate)
-              .start(startTime)
-              .duration(createExamDto.getDuration())
-              .sala(classroom.get(0))
-              .subGrupa(subGrupa)
-              .materie(materie.get(0))
-              .status(status)
-              .build();
+      if (Objects.equals(subGrupa.getSubgroupIndex(), "a")) {
+        Exam newExam =
+            Exam.builder()
+                .name(createExamDto.getTitle())
+                .description(createExamDto.getDescription())
+                .date(examDate)
+                .start(startTime)
+                .duration(createExamDto.getDuration())
+                .sala(classroom.get(0))
+                .subGrupa(subGrupa)
+                .materie(materie.get(0))
+                .status(status)
+                .build();
 
-      // Save the new exam
-      examRepository.save(newExam);
+        examRepository.save(newExam);
+      }
     }
 
     // Map the new exam to ExamDto and return it
@@ -171,14 +176,16 @@ public class ExamServiceImpl implements ExamService {
     }
 
     // Find the exam by name and group
-    Exam exam = findExamByNameAndSubGrupa(confirmExamDto.getName(), confirmExamDto.getSubGrupa());
+    Exam exam = findExamByNameAndSubGrupa(confirmExamDto.getName(), confirmExamDto.getGroup());
     if (exam == null) {
       throw new RuntimeException("Exam not found");
     }
 
     // Check if the exam is assigned to the current professor
+    Profesor profesor = profesorRepository.findByEmailAddress(currentUser.getEmail())
+        .orElseThrow(() -> new RuntimeException("Professor not found"));
     if (!currentUser.getRole().name().equals("ADMIN")
-        && !exam.getMaterie().getTeacher().equals(currentUser)) {
+        && !exam.getMaterie().getProfesor().equals(profesor)) {
       throw new RuntimeException("Professors can only confirm their own exams");
     }
 
@@ -197,12 +204,12 @@ public class ExamServiceImpl implements ExamService {
   public ExamDto updateExam(UpdateExamDto updateExamDto) {
     List<SubGrupa> group =
         groupRepository
-            .findByGroupName(updateExamDto.getOldSubGrupaName())
+            .findByGroupName(updateExamDto.getOldGroupName())
             .orElseThrow(() -> new RuntimeException("SubGrupa not found"));
 
     Materie materie =
         materieRepository
-            .findByName(updateExamDto.getOldMaterieName())
+            .findByName(updateExamDto.getOldSubjectName())
             .orElseThrow(() -> new RuntimeException("Materie not found"));
 
     // Check if the group already has an exam with the same materie
@@ -212,7 +219,7 @@ public class ExamServiceImpl implements ExamService {
     }
 
     // Find the classroom by name
-    Sala classroom = saliRepository.findByName(updateExamDto.getSala());
+    Sala classroom = saliRepository.findByName(updateExamDto.getClassroom());
     if (classroom == null) {
       throw new RuntimeException("Sala not found");
     }
@@ -235,7 +242,7 @@ public class ExamServiceImpl implements ExamService {
         existingExam.get().setSala(classroom);
         List<SubGrupa> subGrupa =
             groupRepository
-                .findByGroupName(updateExamDto.getSubGrupa())
+                .findByGroupName(updateExamDto.getGroup())
                 .orElseThrow(() -> new RuntimeException("SubGrupa not found"));
         existingExam
             .get()
@@ -267,7 +274,9 @@ public class ExamServiceImpl implements ExamService {
   public List<ExamDto> getExamsByUser() {
     User currentUser = userService.getCurrentUser();
     if (currentUser.getRole().name().equals("PROFESSOR")) {
-      return getExamsByTeacher(currentUser).stream()
+      Profesor profesor = profesorRepository.findByEmailAddress(currentUser.getEmail())
+          .orElseThrow(() -> new RuntimeException("Professor not found"));
+      return getExamsByTeacher(profesor).stream()
           .map(this::mapToExamDto)
           .collect(Collectors.toList());
     } else if (currentUser.getRole().name().equals("STUDENT")
@@ -399,10 +408,10 @@ public class ExamServiceImpl implements ExamService {
     return exams.stream().map(this::mapToExamDto).collect(Collectors.toList());
   }
 
-  private List<Exam> getExamsByTeacher(User user) {
+  private List<Exam> getExamsByTeacher(Profesor profesor) {
     List<Materie> materies =
         materieRepository
-            .findByTeacher(user)
+            .findByProfesor(profesor)
             .orElseThrow(() -> new RuntimeException("Teacher not found"));
 
     List<Exam> exams = new ArrayList<>();
@@ -424,7 +433,7 @@ public class ExamServiceImpl implements ExamService {
     return start1.isBefore(end2) && start2.isBefore(end1);
   }
 
-  public TeacherSchedule getTeacherSchedule(LocalDate date, Integer teacherId) {
+  public TeacherSchedule getTeacherSchedule(LocalDate date, Long teacherId) {
     List<Exam> exams = examRepository.findByDateAndTeacher(date, teacherId);
 
     int totalHours = exams.stream().mapToInt(Exam::getDuration).sum();

@@ -20,7 +20,7 @@ public interface ExamService {
 
     List<ExamDto> getExams();
 
-    TeacherSchedule getTeacherSchedule(LocalDate date, Integer teacherId);
+    TeacherSchedule getTeacherSchedule(LocalDate date, Long teacherId);
 
     ExamDto confirmExam(ConfirmExamDto confirmExamDto);
 

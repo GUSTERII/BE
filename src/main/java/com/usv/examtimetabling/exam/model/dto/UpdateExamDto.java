@@ -13,16 +13,16 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class UpdateExamDto {
-  private String oldSubGrupaName;
+  private String oldGroupName;
 
-  private String oldMaterieName;
+  private String oldSubjectName;
 
   @JsonFormat(pattern = "HH:mm dd-MM-yyyy",timezone = "UTC")
   private Date date;
 
-  private String sala;
+  private String classroom;
 
-  private String subGrupa;
+  private String group;
 
   private String materie;
 
@@ -34,4 +34,7 @@ public class UpdateExamDto {
 
   @JsonFormat(pattern = "HH:mm")
   private LocalTime startTime;
+
+  @JsonFormat(pattern = "HH:mm")
+  private LocalTime endTime;
 }

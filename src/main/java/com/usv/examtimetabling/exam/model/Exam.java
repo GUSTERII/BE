@@ -55,17 +55,17 @@ public class Exam {
 
   @NotNull
   @ManyToOne
-  @JoinColumn(name = "classroom_id", nullable = false)
+  @JoinColumn(name = "sala_id", nullable = false)
   private Sala sala;
 
   @NotNull
   @ManyToOne
-  @JoinColumn(name = "group_id", nullable = false)
+  @JoinColumn(name = "subgrupa_id", nullable = false)
   private SubGrupa subGrupa;
 
   @NotNull
   @ManyToOne
-  @JoinColumn(name = "subject_id", nullable = false)
+  @JoinColumn(name = "materie_id", nullable = false)
   private Materie materie;
 
   private ExamStatus status;

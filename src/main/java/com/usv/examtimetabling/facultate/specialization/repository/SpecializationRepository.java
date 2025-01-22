@@ -17,4 +17,6 @@ public interface SpecializationRepository extends JpaRepository<Specialization, 
   Optional<List<Specialization>> findByFacultate(Facultate facultate);
 
   Integer countByFacultate(Facultate faculty);
+
+  boolean existsByName(String specializationName);
 }

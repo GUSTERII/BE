@@ -16,7 +16,7 @@ public class ConfirmExamDto {
 
   private String sala;
 
-  private String subGrupa;
+  private String group;
 
   private String materie;
 
@@ -26,5 +26,9 @@ public class ConfirmExamDto {
 
   private int duration;
 
-  private String start;
+  private String startTime;
+
+  private String endTime;
+
+  private String classroom;
 }
