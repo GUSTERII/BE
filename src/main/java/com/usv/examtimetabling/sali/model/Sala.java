@@ -12,20 +12,19 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Sala {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    @Column(name = "name")
-    private String name;
+  @Column(name = "name")
+  private String name;
 
-    @Column(name = "short_name")
-    private String shortName;
+  @Column(name = "short_name")
+  private String shortName;
 
-    @Column(name = "building_name")
-    private String buildingName = "0"; // Default value
+  @Column(name = "building_name")
+  private String buildingName = "0";
 
-    public int getCapacity() {
-        return 10;
-    }
+  @Column(name = "capacity")
+  private int capacity = 10;
 }
