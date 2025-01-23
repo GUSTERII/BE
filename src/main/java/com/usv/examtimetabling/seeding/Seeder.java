@@ -12,7 +12,6 @@ import com.usv.examtimetabling.facultate.specialization.subgrupa.model.SubGrupa;
 import com.usv.examtimetabling.facultate.specialization.subgrupa.repository.SubGrupaRepository;
 import com.usv.examtimetabling.materie.model.Materie;
 import com.usv.examtimetabling.materie.repository.MaterieRepository;
-import com.usv.examtimetabling.orar.OrarEntryRepository;
 import com.usv.examtimetabling.sali.model.Sala;
 import com.usv.examtimetabling.sali.repository.SaliRepository;
 import com.usv.examtimetabling.user.model.User;
@@ -49,12 +48,12 @@ public class Seeder {
   @PostConstruct
   public void seedDatabase() {
     if (dataConfiguration.getSeeding()) {
-//      fetchAndPopulateProfessors();
-//      populateFaculties();
-//      populateSpecializations();
-//      fetchAndPopulateSubjects();
+      fetchAndPopulateProfessors();
+      populateFaculties();
+      populateSpecializations();
+      fetchAndPopulateSubjects();
       populateSubGroups();
-//      populateRooms();
+      populateRooms();
       createSpecializationsBasedOnGroupsData();
       populateUsers();
     }
@@ -107,8 +106,7 @@ public class Seeder {
     // Save to database
     profesores.forEach(
         profesor -> {
-          if (!profesorRepository.existsByEmailAddress(
-              profesor.getEmailAddress())) { // Avoid duplicates
+          if (!profesorRepository.existsByEmailAddress(profesor.getEmailAddress())) {
             profesorRepository.save(profesor);
           }
         });
@@ -356,7 +354,8 @@ public class Seeder {
     List<SubGrupa> subGroups = apiService.fetchApiData(url, SubGrupa[].class);
     subGroups.forEach(
         subGrupa -> {
-          if (!subGrupaRepository.existsByGroupNameAndSubgroupIndex(subGrupa.getGroupName(), subGrupa.getSubgroupIndex())) {
+          if (!subGrupaRepository.existsByGroupNameAndSubgroupIndex(
+              subGrupa.getGroupName(), subGrupa.getSubgroupIndex())) {
             subGrupaRepository.save(subGrupa);
           }
         });
@@ -369,7 +368,7 @@ public class Seeder {
             .map(
                 profesor -> {
                   User user = new User();
-                  user.setName( profesor.getLastName() + " " + profesor.getFirstName());
+                  user.setName(profesor.getLastName() + " " + profesor.getFirstName());
                   user.setEmail(profesor.getEmailAddress());
                   user.setPassword("$2a$10$oMnnDxXJpv83aZA5vF4ZfOaa75ENafiujgiE9.EpgVFqNUhQhUCbe");
                   user.setRole(Role.PROFESSOR);

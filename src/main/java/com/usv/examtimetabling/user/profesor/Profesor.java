@@ -1,5 +1,8 @@
 package com.usv.examtimetabling.user.profesor;
+
+import com.usv.examtimetabling.exam.model.Exam;
 import jakarta.persistence.*;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -32,5 +35,7 @@ public class Profesor {
 
   @Column(name = "department_name")
   private String departmentName = "Exterior"; // Default value
-}
 
+  @ManyToMany(mappedBy = "profesors")
+  private List<Exam> exams;
+}

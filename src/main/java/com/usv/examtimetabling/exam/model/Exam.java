@@ -1,21 +1,25 @@
 package com.usv.examtimetabling.exam.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.usv.examtimetabling.sali.model.Sala;
 import com.usv.examtimetabling.exam.util.ExamStatus;
 import com.usv.examtimetabling.facultate.specialization.subgrupa.model.SubGrupa;
 import com.usv.examtimetabling.materie.model.Materie;
+import com.usv.examtimetabling.sali.model.Sala;
+import com.usv.examtimetabling.user.profesor.Profesor;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -33,7 +37,7 @@ public class Exam {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
 
-    @NotNull
+  @NotNull
   @Column(nullable = false)
   private String name;
 
@@ -67,6 +71,13 @@ public class Exam {
   @ManyToOne
   @JoinColumn(name = "materie_id", nullable = false)
   private Materie materie;
+
+  @ManyToMany
+  @JoinTable(
+      name = "exam_profesor",
+      joinColumns = @JoinColumn(name = "exam_id"),
+      inverseJoinColumns = @JoinColumn(name = "profesor_id"))
+  private List<Profesor> profesors;
 
   private ExamStatus status;
 }
